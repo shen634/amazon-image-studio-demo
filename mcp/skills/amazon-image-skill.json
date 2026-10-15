@@ -1,0 +1,11 @@
+{
+  "name": "amazon:image-studio",
+  "title": "Amazon Image Studio (Local)",
+  "description": "Remove background, center on white canvas, produce Amazon-compliant main image. Runs locally — no external API.",
+  "inputs": [
+    { "name": "image_path", "type": "file", "required": true },
+    { "name": "sku", "type": "string" },
+    { "name": "options", "type": "object" }
+  ],
+  "run": { "type": "mcp_bridge", "handler": "http://localhost:43218/process" }
+}

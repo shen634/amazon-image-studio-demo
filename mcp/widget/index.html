@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Amazon Image Studio (Local Demo)</title>
+  <style>
+    body { font-family: Arial, Helvetica, sans-serif; padding: 16px; max-width: 800px; }
+    input, button { margin: 6px 0; }
+  </style>
+</head>
+<body>
+  <h2>Amazon Image Studio（本地 demo）</h2>
+  <p>选择本地图片并发送到本地后端处理（rembg + Pillow）。</p>
+  <input id="file" type="file" accept="image/*" /><br/>
+  <input id="sku" placeholder="SKU (可选)" /><br/>
+  <button id="go">处理并生成主图</button>
+  <div id="status" style="margin-top:12px;"></div>
+
+  <script>
+    const status = document.getElementById('status');
+    document.getElementById('go').onclick = async () => {
+      const f = document.getElementById('file').files[0];
+      if (!f) { status.innerText = '请先选择图片'; return; }
+      const sku = document.getElementById('sku').value || '';
+      status.innerText = '上传并处理中...';
+      try {
+        const fd = new FormData();
+        fd.append('image', f);
+        fd.append('sku', sku);
+        const res = await fetch('http://localhost:43218/process', { method: 'POST', body: fd });
+        const json = await res.json();
+        if (json.error) {
+          status.innerText = '错误：' + json.error;
+          return;
+        }
+        status.innerHTML = `完成：<a href="${json.output_url}" target="_blank">下载主图</a><br/>QA 报告：<a href="${json.report_url}" target="_blank">查看</a><br/><small>输出保存在 data/out/</small>`;
+      } catch (e) {
+        status.innerText = '调用后端失败：' + e;
+      }
+    }
+  </script>
+</body>
+</html>

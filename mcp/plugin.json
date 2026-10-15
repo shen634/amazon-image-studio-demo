@@ -1,0 +1,9 @@
+{
+  "name": "amazon-image-studio",
+  "version": "0.1.0",
+  "description": "Local Amazon product image studio — background removal, auto-canvas, QA. No external API.",
+  "entrypoints": {
+    "widget": "mcp/widget/index.html",
+    "skills": "mcp/skills/amazon-image-skill.json"
+  }
+}
